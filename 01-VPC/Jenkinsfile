@@ -1,0 +1,51 @@
+pipeline {
+    agent { node { label 'AGENT-1' } }
+    options {
+        ansicolor{'xterm'}
+    }
+    
+    //you can keep any server name here, I have my agent-1 server so, given that 
+
+    stages {
+        stage('Init') {
+            steps {
+                echo 'Initializing..'
+                sh '''
+                    
+                    ls -lrt
+                    pwd
+                    cd 01-VPC
+                    terraform init
+
+
+                '''
+            }
+        }
+    }
+        stage('Plan') {
+            steps {
+                echo 'Planning..'
+                sh '''
+                    ls -lrt
+                    pwd
+                    cd /01-VPC
+                    terraform plan
+
+
+                '''
+
+            }
+        }
+
+    post { 
+        always { 
+            echo 'I will always run weather the job is success or not'
+        }
+        success{
+            echo 'I will always run when the job is success'
+        }
+        failure{
+            echo 'I will always run when the job is failure and no use'
+        }
+    }
+}
