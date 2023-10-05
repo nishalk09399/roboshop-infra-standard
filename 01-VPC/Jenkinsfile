@@ -1,7 +1,7 @@
 pipeline {
     agent { node { label 'AGENT-1' } }
     options {
-        ansicolor{'xterm'}
+        ansiColor{'xterm'}
     }
     
     //you can keep any server name here, I have my agent-1 server so, given that 
@@ -21,7 +21,7 @@ pipeline {
                 '''
             }
         }
-    }
+    
         stage('Plan') {
             steps {
                 echo 'Planning..'
@@ -36,6 +36,28 @@ pipeline {
 
             }
         }
+
+        stage('Approve') {
+            steps {
+                input "shall i approve...??"
+            }
+        }
+
+        stage('Apply') {
+            steps {
+                echo 'Applying..'
+                sh '''
+                    ls -lrt
+                    pwd
+                    cd /01-VPC
+                    terraform apply -auto-approve
+
+
+                '''
+
+            }
+        }
+    }
 
     post { 
         always { 
