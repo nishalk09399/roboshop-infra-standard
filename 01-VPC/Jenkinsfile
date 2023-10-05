@@ -42,6 +42,18 @@ pipeline {
                 '''
             }
         }
+
+        stage('Destroy') {
+            steps{
+                
+                sh '''
+                    pwd
+                    ls -ltr
+                    cd 01-VPC
+                    terraform destroy -auto-approve
+                '''
+            }
+        }
     }
 
     post { 
