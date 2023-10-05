@@ -1,73 +1,58 @@
 pipeline {
     agent { node { label 'AGENT-1' } }
     options {
-        ansiColor{'xterm'}
+        ansiColor('xterm')
     }
-    
-    //you can keep any server name here, I have my agent-1 server so, given that 
 
     stages {
         stage('Init') {
             steps {
-                echo 'Initializing..'
-                sh '''
-                    
-                    ls -lrt
-                    pwd
+                sh'''
                     cd 01-VPC
+                    ls -ltr
+                    pwd
                     terraform init
-
-
                 '''
             }
         }
-    
         stage('Plan') {
             steps {
-                echo 'Planning..'
-                sh '''
-                    ls -lrt
+                sh'''
+                    ls -ltr
                     pwd
-                    cd /01-VPC
+                    cd 01-VPC
                     terraform plan
-
-
                 '''
-
             }
         }
-
         stage('Approve') {
-            steps {
-                input "shall i approve...??"
+            steps{
+                input "Shall I apply?"
             }
         }
 
         stage('Apply') {
-            steps {
-                echo 'Applying..'
+            steps{
+                
                 sh '''
-                    ls -lrt
                     pwd
-                    cd /01-VPC
+                    ls -ltr
+                    cd 01-VPC
                     terraform apply -auto-approve
-
-
                 '''
-
             }
         }
     }
 
     post { 
         always { 
-            echo 'I will always run weather the job is success or not'
+            echo 'I will always run whether job is success or not'
         }
         success{
-            echo 'I will always run when the job is success'
+            echo 'I will run only when job is success'
         }
         failure{
-            echo 'I will always run when the job is failure'
+            echo 'I will run when failure'
         }
     }
 }
